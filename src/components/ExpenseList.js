@@ -8,17 +8,16 @@ const ExpenseList = () => {
     const itemsInCart = expenses.filter((expense) => expense.quantity > 0);
 
     if (itemsInCart.length === 0) {
-        return <p className='text-muted'>Your cart is empty. Add some items below.</p>;
+        return <p className='receipt-empty'>Nothing here yet. Add an item to start your receipt.</p>;
     }
 
     return (
-        <table className='table'>
-            <thead className='thead-light'>
+        <table className='receipt-lines'>
+            <caption className='visually-hidden'>Items in your cart</caption>
+            <thead className='visually-hidden'>
                 <tr>
-                    <th scope='col'>Items</th>
-                    <th scope='col'>Quantity</th>
-                    <th scope='col'>Unit Price</th>
-                    <th scope='col'>Items Price</th>
+                    <th scope='col'>Item</th>
+                    <th scope='col'>Price</th>
                     <th scope='col'>Remove</th>
                 </tr>
             </thead>

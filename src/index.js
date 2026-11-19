@@ -1,5 +1,9 @@
+// Modified 2026 by AnnaTverdovska. Original: IBM Skills Network shopping app template (Apache License 2.0).
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// Fonts are served with the app (SIL Open Font License), not loaded from Google.
+import '@fontsource-variable/archivo/wdth';
+import '@fontsource-variable/martian-mono/wdth';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

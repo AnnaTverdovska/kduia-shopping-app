@@ -13,20 +13,16 @@ const Location = () => {
     };
 
     return (
-        <div className='alert alert-secondary'>
-            <label htmlFor='currency' className='me-2'>
-                Location
-            </label>
+        <div className='currency'>
+            <label htmlFor='currency'>Currency</label>
             <select
                 id='currency'
-                name='Location'
-                className='form-select d-inline-block w-auto'
                 value={Location}
                 onChange={(event) => changeLocation(event.target.value)}
             >
                 {CURRENCIES.map(({ symbol, label }) => (
                     <option key={symbol} value={symbol}>
-                        {label} ({symbol})
+                        {symbol} {label}
                     </option>
                 ))}
             </select>

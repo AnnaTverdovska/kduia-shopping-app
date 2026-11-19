@@ -1,13 +1,383 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Modified 2026 by AnnaTverdovska. Original: IBM Skills Network shopping app template (Apache License 2.0). */
+
+/* The cart is drawn as a till receipt; everything around it stays quiet. */
+:root {
+    --counter: #e6eaf0;
+    --ink: #1b2230;
+    --muted: #586174;
+    --paper: #ffffff;
+    --line: #c9d1dc;
+    --line-strong: #a3adbd;
+    --cobalt: #2443c9;
+    --cobalt-dark: #1a3299;
+    --danger: #b3261e;
+    --danger-soft: #f8e4e2;
+    --radius: 8px;
+    --sans: 'Archivo Variable', system-ui, sans-serif;
+    /* Archivo comes second so the rupee sign, which Martian Mono lacks, still matches the page. */
+    --mono: 'Martian Mono Variable', 'Archivo Variable', ui-monospace, monospace;
+    color-scheme: light;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--counter);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 2px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---------- Header ---------- */
+.topbar {
+    max-width: 66rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    border-bottom: 2px solid var(--line);
+}
+
+.app-title {
+    margin: 0;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 800;
+    font-stretch: 75%;
+    line-height: 1;
+    letter-spacing: -0.01em;
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.currency label {
+    font-weight: 700;
+}
+
+/* ---------- Form controls ---------- */
+select,
+input[type='number'] {
+    font: inherit;
+    color: var(--ink);
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.6rem 0.8rem;
+    min-height: 2.9rem;
+}
+
+select:hover,
+input[type='number']:hover {
+    border-color: var(--line-strong);
+}
+
+/* ---------- Layout ---------- */
+.layout {
+    max-width: 66rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-stretch: 85%;
+}
+
+.section-lead {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    max-width: 30rem;
+}
+
+/* ---------- Adding items ---------- */
+.item-form {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 24rem;
+    margin-top: 1.5rem;
+}
+
+.field {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.field > label,
+.field > legend {
+    display: block;
+    padding: 0;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+.field select {
+    width: 100%;
+}
+
+.field-hint {
+    margin: 0.35rem 0 0;
+    min-height: 1.5em;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.quantity-input {
+    width: 7rem;
+}
+
+.toggle {
+    display: inline-flex;
+    gap: 3px;
+    padding: 3px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.toggle-option {
+    position: relative;
+}
+
+.toggle-option input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.toggle-option span {
+    display: block;
+    padding: 0.45rem 1.2rem;
+    border-radius: 5px;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.toggle-option input:checked + span {
+    background: var(--cobalt);
+    color: #fff;
+}
+
+.toggle-option input:focus-visible + span {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 2px;
+}
+
+.form-actions {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+}
+
+.primary-button {
+    font: inherit;
+    font-weight: 700;
+    color: #fff;
+    background: var(--cobalt);
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: var(--cobalt-dark);
+}
+
+.form-error {
+    margin: 0;
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.form-status {
+    margin: 0;
+    color: var(--muted);
+}
+
+.form-status:empty {
+    display: none;
+}
+
+/* ---------- The receipt ---------- */
+.receipt-wrap {
+    /* drop-shadow follows the torn edge, unlike box-shadow */
+    filter: drop-shadow(0 1px 1px rgba(27, 34, 48, 0.12)) drop-shadow(0 10px 20px rgba(27, 34, 48, 0.1));
+}
+
+.receipt {
+    position: relative;
+    margin-bottom: 12px;
+    padding: 1.5rem 1.4rem 1.6rem;
+    background: var(--paper);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The torn bottom edge */
+.receipt::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -12px;
+    height: 12px;
+    background:
+        linear-gradient(135deg, var(--paper) 50%, transparent 50%) 0 0 / 12px 12px repeat-x,
+        linear-gradient(225deg, var(--paper) 50%, transparent 50%) 0 0 / 12px 12px repeat-x;
+}
+
+.receipt-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 2px dashed var(--line-strong);
+}
+
+.receipt-head h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.receipt-date {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.receipt-lines {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-line td {
+    padding: 0.75rem 0;
+    vertical-align: top;
+    border-bottom: 1px dotted var(--line-strong);
+    animation: print-in 0.25s ease-out;
+}
+
+.line-name {
+    display: block;
+    font-weight: 600;
+}
+
+.line-detail {
+    display: block;
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.receipt-line .line-price {
+    padding-left: 1rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.line-remove {
+    width: 2.5rem;
+    text-align: right;
+}
+
+.remove-button {
+    display: inline-grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    margin-top: -0.25rem;
+    padding: 0;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    color: var(--danger);
+    background: var(--danger-soft);
+}
+
+.receipt-empty {
+    margin: 0;
+    padding: 1.5rem 0;
+    color: var(--muted);
+    border-bottom: 1px dotted var(--line-strong);
+}
+
+.receipt-total {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0 0;
+    padding: 0.9rem 2.5rem 0 0;
+    border-top: 2px dashed var(--line-strong);
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+/* New lines "print" onto the receipt */
+@keyframes print-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .receipt-line td {
+        animation: none;
+    }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 52rem) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .item-form {
+        max-width: none;
+    }
 }
