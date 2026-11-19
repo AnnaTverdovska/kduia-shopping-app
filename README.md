@@ -1,70 +1,110 @@
-# Getting Started with Create React App
+# Shopping App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![CI](https://github.com/AnnaTverdovska/kduia-shopping-app/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnaTverdovska/kduia-shopping-app/actions/workflows/ci.yml)
 
-## Available Scripts
+A small React shopping cart. Pick an item, add or reduce its quantity, and the cart and its
+total update straight away. Removing an item takes one click, and the currency can be switched
+between pound, dollar, euro and rupee.
 
-In the project directory, you can run:
+The project started from IBM Skills Network's shopping cart template, used in IBM's
+*Developing Front-End Apps with React* course.
 
-### `npm start`
+**[Try the live demo](https://annatverdovska.github.io/kduia-shopping-app/)**. It runs entirely
+in your browser; nothing is sent anywhere.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Desktop | Phone |
+|---|---|
+| ![The cart with three items](docs/screenshots/cart.png) | <img src="docs/screenshots/phone.png" alt="The cart on a phone" width="260"> |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How it works
 
-### `npm test`
+All state lives in one React context (`src/context/AppContext.js`), managed by `useReducer`.
+Components never change the state directly; they dispatch one of four actions:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Action | What it does |
+|---|---|
+| `ADD_QUANTITY` | Adds the given number of an item to the cart |
+| `RED_QUANTITY` | Takes the given number away, never going below zero |
+| `DELETE_ITEM` | Removes an item from the cart |
+| `CHG_LOCATION` | Switches the currency symbol |
 
-### `npm run build`
+The reducer always returns a new state object instead of changing the old one, so React
+re-renders reliably. The cart total is calculated from the items on every render rather than
+stored, so it can never drift out of sync.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Component | Role |
+|---|---|
+| `CartValue` | Shows the cart total |
+| `Location` | Chooses the currency |
+| `ExpenseList` | Lists the items in the cart, or says the cart is empty |
+| `ExpenseItem` | One row: quantity, unit price, line total and a remove button |
+| `ItemSelected` | The form for adding or reducing items. It rejects missing items and quantities that are not whole numbers above zero |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running it locally
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+You need Node.js 18 or newer.
 
-### `npm run eject`
+```bash
+npm ci        # install the exact versions from package-lock.json
+npm start     # development server at http://localhost:3000
+npm test      # tests in watch mode
+npm run build # production build in build/
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tests
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`src/App.test.js` has 8 tests, written with React Testing Library. They cover:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- an empty cart at the start
+- adding items and the updated total
+- reducing a quantity, which never goes below zero
+- the remove button
+- switching the currency, which updates every price
+- the messages for invalid input
+- the reducer leaving the previous state unchanged
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+GitHub Actions runs the tests and a production build on every push
+([`.github/workflows/ci.yml`](.github/workflows/ci.yml)). Every push to `main` also publishes
+the live demo with GitHub Pages ([`.github/workflows/pages.yml`](.github/workflows/pages.yml)).
 
-## Learn More
+## Changes to the IBM template
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This repository is a modified version of IBM Skills Network's template
+(`ibm-developer-skills-network/kduia-shopping-app`), licensed under the Apache License 2.0. The
+template came with empty components for the learner to complete. AnnaTverdovska wired up
+`src/App.js` in 2023 and made all other changes in 2026; the commit history shows each one in
+detail. Changed files that allow comments also say so in their first lines.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<details>
+<summary>Files changed from the template (14)</summary>
 
-### Code Splitting
+- `.gitignore`
+- `README.md`
+- `package-lock.json`
+- `package.json`
+- `public/index.html`
+- `public/manifest.json`
+- `src/App.js`
+- `src/App.test.js`
+- `src/components/CartValue.js`
+- `src/components/ExpenseItem.js`
+- `src/components/ExpenseList.js`
+- `src/components/ItemSelected.js`
+- `src/components/Location.js`
+- `src/context/AppContext.js`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+</details>
 
-### Analyzing the Bundle Size
+<details>
+<summary>Files added (2, plus the screenshots in docs/)</summary>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `.github/workflows/ci.yml`
+- `.github/workflows/pages.yml`
 
-### Making a Progressive Web App
+</details>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Apache License 2.0](LICENSE), the license of the original template: Copyright 2020 IBM
+Developer Skills Network. The template itself was set up with
+[Create React App](https://github.com/facebook/create-react-app) (MIT License).
